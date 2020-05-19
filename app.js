@@ -18,7 +18,7 @@
 var express = require('express');
 var session = require('express-session');
 var bodyParser = require('body-parser');
-var Keycloak = require('keycloak-connect');
+var Keycloak = require('phasetwo-nodejs');
 var cors = require('cors');
 
 var app = express();
