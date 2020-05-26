@@ -1,6 +1,11 @@
 {
-  "name": "service-nodejs",
+  "name": "phasetwo-nodejs-example",
   "version": "0.0.1",
+  "description": "An example web service showing usage of phasetwo-nodejs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/p2-inc/phasetwo-js-example.git"
+  },
   "scripts": {
     "start": "node app.js"
   },
@@ -8,7 +13,8 @@
     "body-parser": "^1.13.3",
     "express": "^4.13.3",
     "express-session": "^1.14.2",
-    "cors": "^2.8.1"
+    "cors": "^2.8.1",
+    "phasetwo-nodejs": "git://github.com/p2-inc/phasetwo-nodejs.git"
   },
   "devDependencies": {
     "keycloak-request-token": "^0.1.0",
