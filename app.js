@@ -29,7 +29,6 @@ app.use(cors());
 
 // Create a session-store to be used by both the express-session
 // middleware and the keycloak middleware.
-
 var memoryStore = new session.MemoryStore();
 
 app.use(
@@ -49,6 +48,7 @@ app.use(
 
 var keycloak = new Keycloak({
   store: memoryStore,
+  secretOption: 'hello',
 });
 
 app.use(
@@ -70,10 +70,23 @@ app.get('/service/admin', keycloak.protect('realm:admin'), function (req, res) {
   res.json({ message: 'admin' });
 });
 
+app.get('/service/account', keycloak.checkSso(), async function (req, res) {
+  let token = req.headers.authorization;
+  const bearer = 'Bearer ';
+  if (token && token.substring(0, bearer.length) === bearer) {
+    token = token.substring(bearer.length);
+  }
+  const ret = await keycloak.accountApi().get(token);
+
+  res.json({ message: ret });
+});
+
 app.use('*', function (req, res) {
   res.send('Not found!');
 });
+
 const port = 3000;
+
 app.listen(port, function () {
   console.log(`Started at port ${port}`);
 });
