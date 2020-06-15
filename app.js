@@ -47,7 +47,6 @@ app.use(
 // installed from the Keycloak web console.
 var phasetwo = new PhaseTwo({
   store: memoryStore,
-  secretOption: 'hello',
 });
 
 app.use(
