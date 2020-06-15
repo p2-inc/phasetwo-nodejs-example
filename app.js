@@ -18,7 +18,7 @@
 var express = require('express');
 var session = require('express-session');
 var bodyParser = require('body-parser');
-var Keycloak = require('phasetwo-nodejs');
+var PhaseTwo = require('phasetwo-nodejs');
 var cors = require('cors');
 
 var app = express();
@@ -28,7 +28,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // Create a session-store to be used by both the express-session
-// middleware and the keycloak middleware.
+// middleware and the PhaseTwo middleware.
 var memoryStore = new session.MemoryStore();
 
 app.use(
@@ -40,19 +40,18 @@ app.use(
   }),
 );
 
-// Provide the session store to the Keycloak so that sessions
-// can be invalidated from the Keycloak console callback.
+// Provide the session store to PhaseTwo so that sessions
+// can be invalidated from the PhaseTwo console callback.
 //
 // Additional configuration is read from keycloak.json file
 // installed from the Keycloak web console.
-
-var keycloak = new Keycloak({
+var phasetwo = new PhaseTwo({
   store: memoryStore,
   secretOption: 'hello',
 });
 
 app.use(
-  keycloak.middleware({
+  phasetwo.middleware({
     logout: '/logout',
     admin: '/',
   }),
@@ -62,21 +61,25 @@ app.get('/service/public', function (req, res) {
   res.json({ message: 'public' });
 });
 
-app.get('/service/secured', keycloak.protect('realm:user'), function (req, res) {
+app.get('/service/secured', phasetwo.protect('realm:user'), function (req, res) {
   res.json({ message: 'secured' });
 });
 
-app.get('/service/admin', keycloak.protect('realm:admin'), function (req, res) {
+app.get('/service/admin', phasetwo.protect('realm:admin'), function (req, res) {
   res.json({ message: 'admin' });
 });
 
-app.get('/service/account', keycloak.checkSso(), async function (req, res) {
+/*
+ * Makes a request to the PhaseTwo account API to obtain information
+ * about the currently authenticated user
+ */
+app.get('/service/account', phasetwo.checkSso(), async function (req, res) {
   let token = req.headers.authorization;
   const bearer = 'Bearer ';
   if (token && token.substring(0, bearer.length) === bearer) {
     token = token.substring(bearer.length);
   }
-  const ret = await keycloak.accountApi().get(token);
+  const ret = await phasetwo.accountApi().get(token);
 
   res.json({ message: ret });
 });
