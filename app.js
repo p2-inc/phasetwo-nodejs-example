@@ -78,9 +78,16 @@ app.get('/service/account', phasetwo.checkSso(), async function (req, res) {
   if (token && token.substring(0, bearer.length) === bearer) {
     token = token.substring(bearer.length);
   }
-  const ret = await phasetwo.accountApi().get(token);
-
-  res.json({ message: ret });
+  try {
+    const ret = await phasetwo.accountApi().get(token);
+    res.json({ message: ret });
+  } catch (err) {
+    if (err.message) {
+      res.json({ message: err.message });
+    } else {
+      res.json({ message: err });
+    }
+  }
 });
 
 app.use('*', function (req, res) {
