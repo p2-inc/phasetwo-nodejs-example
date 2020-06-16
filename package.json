@@ -20,7 +20,7 @@
     "keycloak-request-token": "^0.1.0",
     "keycloak-client-registration": "^0.1.0",
     "coveralls": "^2.11.9",
-    "eslint": "^3.3.1",
+    "eslint": "^4.18.2",
     "eslint-config-semistandard": "^7.0.0-beta.0",
     "eslint-config-standard": "^6.0.0",
     "eslint-plugin-promise": "^3.3.0",
